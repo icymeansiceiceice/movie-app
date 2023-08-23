@@ -1,7 +1,9 @@
 import { createStore } from 'vuex'
+import movies from './module/movie'
 
 export default createStore({
   state: {
+      
   },
   getters: {
   },
@@ -10,5 +12,6 @@ export default createStore({
   actions: {
   },
   modules: {
+    movies
   }
 })
