@@ -1,4 +1,4 @@
-import movieList from '../../components/MovieList.vue'
+import movieList from '../../assets/movie-list'
 
 const state ={
     movies : movieList
@@ -15,7 +15,7 @@ const actions = {
 
 const getters = {
     getMovies: state =>{
-        return state.movies;
+        return state.movies; 
     }
 };
 
