@@ -1,32 +1,34 @@
 <template>
     <div id="movie-container">
-        movie list  
-		<ul>
-			<li v-for="(item, index) in getMovies" :key="index">
-				{{ item.name }}
-			</li>
-		</ul>
+       
+		<Movie v-for="(item) in getMovies" :key="item.id" :movie = "item" />
+			
     </div>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed,onMounted,ref } from 'vue'
 import { useStore } from 'vuex';
+import Movie from './Movie';
 
 
 export default {
+	components:{
+		Movie
+	},
 	setup(props) {
-		let movie = [];
+		let movies = ref([]);
 		const store = useStore();
 
 		let getMovies = computed(()=>{
-			return store.getters.getMovies;
+			return movies =  store.getters.getMovies;
 		});
-
+		
 
 		return{
-			movie,
+			movies,
 			getMovies
+			
 		}
 	}
 }

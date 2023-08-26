@@ -3,15 +3,31 @@
 		<div id="navbar">
 			<h2>Movie.io</h2>
 			<div>
-				<input type="text" placeholder="Find movie....">
+				<input v-model="search" type="text" placeholder="Find movie....">
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-export default {
+import { ref,watch } from 'vue';
+import { useStore } from 'vuex';
 
+
+export default {
+	
+	setup(props) {
+			let search = ref('');
+			let store = useStore();
+
+			watch(search,()=>{
+				store.dispatch("search",search);
+			});
+
+			return{
+				search
+			}
+	}
 }
 </script>
 

@@ -1,21 +1,29 @@
 import movieList from '../../assets/movie-list'
 
+
 const state ={
-    movies : movieList
+    movies : movieList,
+    search : ''
 };
 
 
 const mutations = {
-
+    searchMovie(state,search){
+        state.search = search
+    }
 };
 
 const actions = {
-
+    search({commit},search){
+        commit('searchMovie',search);
+    }
 };
 
 const getters = {
     getMovies: state =>{
-        return state.movies; 
+        return state.movies.filter(movie =>{
+            return movie.name.toLowerCase().indexOf(state.search.toLowerCase()) > -1;
+        })  ;
     }
 };
 
