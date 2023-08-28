@@ -1,16 +1,30 @@
 <template>
     <div id="filters">
         <h3>Filter</h3>
-        <p>rating highest</p>
-        <p>rating lowest</p>
-        <p>your newest</p>
-        <p>your oldest</p>
+		<p v-for="(item, index) in filter" :key="index" @click="applyFilter(item)">
+			{{ item.name }}
+		</p>
     </div>
 </template>
 
 <script>
-export default {
+import { ref } from 'vue';
+import Filter from '../assets/filter-list';
+import { useStore } from 'vuex';
 
+export default {
+	setup(props) {
+			let filter = ref(Filter);
+			const store = useStore();
+			let applyFilter = (item)=>{
+				store.dispatch("filter",item);
+			};
+
+		return {
+			filter,
+			applyFilter
+		}
+	}
 }
 </script>
 

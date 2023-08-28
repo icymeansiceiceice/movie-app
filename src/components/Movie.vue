@@ -1,6 +1,6 @@
 <template>
 	<div class="movie">
-		<img :src="movie.poster" alt="movie poster">
+		<img :src="movie.poster" alt="movie poster" @click="openDetail">
 		<div class="description">
 			<div class="basic-info">
 				<h3>{{ movie.name }}</h3>
@@ -16,11 +16,15 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
+
 export default {
 	props:[
 		'movie'
 	],
   setup(props) {
+	let router = useRouter();
 	let movie = props.movie;
 	let getRatingColor = ()=>{
 		if(movie.rating >7){
@@ -31,9 +35,14 @@ export default {
 		}
 		return "#e10505"; 
 	};
+
+	let openDetail=()=>{
+		router.push({name:'moviePreview',params:{id:movie.id}})
+	};
 	return {
 		movie,
-		getRatingColor
+		getRatingColor,
+		openDetail
 	}
   }
 }
