@@ -6,16 +6,18 @@
             <img :src="movie.poster" alt="Movie Poster">
         </div>
         <div id="movie-info">
-            <div>
+            <div >
                 <h1>{{ movie.name }}</h1>
                 <h3>{{ movie.year }}</h3>
                 <h3>{{ movie.genre }}</h3>
-                <h3><span :style="{'background-color': getRatingColor()}">{{ movie.rating }}</span></h3>
+                <h3>
+					<span id="movie-rating" :style="{'background-color': getRatingColor()}">{{ movie.rating }}</span>
+				</h3>
                 <h3>Budget : {{ movie.budget }}</h3>
                 <h3>Box office : {{ movie.boxOffice }}</h3>
                 <h3>Actors: 
                     <span v-for="(item, index) in movie.actors" :key="index">
-                        {{ item.actors.name }}
+                        {{ item.name }}
                     </span>
                 </h3>
                 <h3>
@@ -33,7 +35,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import NavBar from '../components/NavBar.vue';
 import { useStore } from 'vuex';
 
@@ -58,16 +60,11 @@ export default {
 		}
 		return "#e10505"; 
 	};
-
-    onMounted(() => {
-        console.log(id);
-        movie = store.getters.getMovieById(parseInt(id));
-    });
-
-
+		movie = store.getters.getMovieById(parseInt(id));
     return {
 		getRatingColor,
-        movie
+        movie,
+		
 	}
     }
 
