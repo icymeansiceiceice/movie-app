@@ -26,11 +26,103 @@
                 </h3>
             </div>
             <div id="options">
-                <button class="edit">Edit</button>
-                <button class="delete">Delete</button>
+                <button class="edit" @click="showModal = true">Edit</button>
+                <button class="delete" @click="deleteMovie">Delete</button>
             </div>
         </div>
     </div>
+
+	<Modal v-if="showModal" @close="showModal = !showModal">
+			<template v-slot:header>
+				<h3 class="m-0">Update movie</h3>
+			</template>
+			<template v-slot:body>
+				<form
+					@submit.prevent="updateMovie"
+					ref="movieForm"
+					id="movie-form"
+				>
+					<p>Fill out the details bellow</p>
+					<input
+						required
+						v-model="movie.name"
+						type="text"
+						placeholder="Name"
+					/>
+					<input
+						required
+						v-model="movie.year"
+						type="number"
+						placeholder="Year"
+					/>
+					<input
+						required
+						v-model="movie.rating"
+						type="number"
+						placeholder="Rating"
+					/>
+					<input
+						required
+						v-model="movie.genre"
+						type="text"
+						placeholder="Genre"
+					/>
+					<input
+						required
+						v-model="movie.budget"
+						type="text"
+						placeholder="Budget"
+					/>
+					<input
+						required
+						v-model="movie.boxOffice"
+						type="text"
+						placeholder="Box Office"
+					/>
+					<input
+						required
+						v-model="movie.poster"
+						type="text"
+						placeholder="Poster"
+					/>
+					<hr />
+					<div>
+						<div id="actor-input">
+							<p class="m-0">Actors</p>
+							<span @click="addActor" class="add-actor">+</span>
+						</div>
+
+						<input
+							required
+							v-for="(actor, index) in movie.actors"
+							:key="index"
+							v-model="movie.actors[index].name"
+							type="text"
+							placeholder="Actor"
+						/>
+					</div>
+
+					<hr />
+
+					<textarea
+						required
+						v-model="movie.storyline"
+						placeholder="Storyline"
+						rows="6"
+					/>
+				</form>
+			</template>
+			<template v-slot:footer>
+				<button id="add-movie" @click="$refs.movieForm.requestSubmit()">
+					Update
+				</button>
+				
+			</template>
+		</Modal>
+
+
+
+
   </div>
 </template>
 
@@ -38,19 +130,25 @@
 import { onBeforeMount, onMounted, ref } from 'vue';
 import NavBar from '../components/NavBar.vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import Modal from '../components/Modal.vue';
 
 export default {
     components:{
-        NavBar
+        NavBar,
+		Modal
     },
     props:[
         'id'
     ],
     setup(props) {
+		let router = useRouter();
+		const store = useStore();
+		let showModal = ref(false);
         let id = props.id;
-        let movie = ref({});
-        const store = useStore();
-
+        let movie = ref(store.getters.getMovieById(parseInt(id)));
+        
+		
         let getRatingColor = ()=>{
 		if(movie.rating >7){
 			return "#5eb85e";
@@ -60,11 +158,25 @@ export default {
 		}
 		return "#e10505"; 
 	};
-		movie = store.getters.getMovieById(parseInt(id));
+		let deleteMovie = ()=>{
+			store.dispatch("deleteMovie",parseInt(id));
+			router.push('/');
+		};
+
+		let updateMovie = ()=>{
+			store.dispatch('updateMovie',movie);
+			router.push('/')
+		};
+
+
+
+
     return {
 		getRatingColor,
         movie,
-		
+		deleteMovie,
+		showModal,
+		updateMovie
 	}
     }
 
@@ -188,6 +300,17 @@ export default {
 		}
 
 		#update-movie {
+			background-color: #5eb85e;
+			border: none;
+			padding: 5px;
+			width: 70px;
+			color: white;
+			border-radius: 10px;
+			cursor: pointer;
+			text-transform: uppercase;
+			outline: none;
+		}
+		#add-movie {
 			background-color: #5eb85e;
 			border: none;
 			padding: 5px;
